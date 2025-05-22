@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 24.8.1.2 (Linux)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="00:00:00"/>
+	<style type="text/css">
+		@page { size: 8.27in 11.69in; margin: 0.79in }
+		p { line-height: 115%; margin-bottom: 0.1in; background: transparent }
+		pre { background: transparent }
+		pre.western { font-family: "Liberation Mono", monospace; font-size: 10pt }
+		pre.cjk { font-family: "NSimSun", monospace; font-size: 10pt }
+		pre.ctl { font-family: "Liberation Mono", monospace; font-size: 10pt }
+	</style>
+</head>
+<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><pre class="western">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;Cover Page Maker&lt;/title&gt;
+  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js&quot;&gt;&lt;/script&gt;
+  &lt;style&gt;
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    .form {
+      margin: 20px auto;
+      max-width: 500px;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .cover {
+      margin-top: 30px;
+      padding: 40px;
+      background: white;
+      border: 2px solid #000;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      display: none;
+      position: relative;
+    }
+    .cover img {
+      max-width: 120px;
+      max-height: 120px;
+      margin-bottom: 20px;
+    }
+    .cover h2 {
+      margin: 10px 0;
+    }
+    .line {
+      margin: 10px 0;
+    }
+    #downloadBtn {
+      margin-top: 20px;
+      display: none;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;h1&gt;Cover Page Maker&lt;/h1&gt;
+  
+  &lt;div class=&quot;form&quot;&gt;
+    &lt;input type=&quot;text&quot; id=&quot;name&quot; placeholder=&quot;Your Name&quot;&gt;
+    &lt;input type=&quot;text&quot; id=&quot;institute&quot; placeholder=&quot;Institute Name&quot;&gt;
+    &lt;input type=&quot;text&quot; id=&quot;course&quot; placeholder=&quot;Course Name&quot;&gt;
+    &lt;input type=&quot;text&quot; id=&quot;code&quot; placeholder=&quot;Course Code&quot;&gt;
+    &lt;input type=&quot;date&quot; id=&quot;date&quot;&gt;
+    &lt;input type=&quot;file&quot; id=&quot;logo&quot; accept=&quot;image/*&quot;&gt;
+    &lt;button onclick=&quot;generateCover()&quot;&gt;Generate Cover Page&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;cover&quot; id=&quot;coverPage&quot;&gt;
+    &lt;img id=&quot;logoPreview&quot; alt=&quot;University Logo&quot;&gt;
+    &lt;h2 id=&quot;instName&quot;&gt;[Institute Name]&lt;/h2&gt;
+    &lt;hr&gt;
+    &lt;h3&gt;Course Title: &lt;span id=&quot;courseName&quot;&gt;[Course Name]&lt;/span&gt;&lt;/h3&gt;
+    &lt;div class=&quot;line&quot;&gt;Course Code: &lt;span id=&quot;courseCode&quot;&gt;[Code]&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;line&quot;&gt;Submitted By: &lt;span id=&quot;yourName&quot;&gt;[Your Name]&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;line&quot;&gt;Date: &lt;span id=&quot;submitDate&quot;&gt;[Date]&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;button id=&quot;downloadBtn&quot; onclick=&quot;downloadPDF()&quot;&gt;Download as PDF&lt;/button&gt;
+
+  &lt;script&gt;
+    function generateCover() {
+      const name = document.getElementById(&quot;name&quot;).value;
+      const institute = document.getElementById(&quot;institute&quot;).value;
+      const course = document.getElementById(&quot;course&quot;).value;
+      const code = document.getElementById(&quot;code&quot;).value;
+      const date = document.getElementById(&quot;date&quot;).value;
+      const logoFile = document.getElementById(&quot;logo&quot;).files[0];
+
+      // Set text content
+      document.getElementById(&quot;instName&quot;).innerText = institute || &quot;[Institute Name]&quot;;
+      document.getElementById(&quot;courseName&quot;).innerText = course || &quot;[Course Name]&quot;;
+      document.getElementById(&quot;courseCode&quot;).innerText = code || &quot;[Course Code]&quot;;
+      document.getElementById(&quot;yourName&quot;).innerText = name || &quot;[Your Name]&quot;;
+      document.getElementById(&quot;submitDate&quot;).innerText = date || &quot;[Date]&quot;;
+
+      // Set logo
+      const logoPreview = document.getElementById(&quot;logoPreview&quot;);
+      if (logoFile) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          logoPreview.src = e.target.result;
+        };
+        reader.readAsDataURL(logoFile);
+      } else {
+        logoPreview.src = &quot;&quot;;
+      }
+
+      document.getElementById(&quot;coverPage&quot;).style.display = &quot;block&quot;;
+      document.getElementById(&quot;downloadBtn&quot;).style.display = &quot;inline-block&quot;;
+    }
+
+    function downloadPDF() {
+      const cover = document.getElementById(&quot;coverPage&quot;);
+      const opt = {
+        margin: 0.5,
+        filename: 'cover-page.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().from(cover).set(opt).save();
+    }
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</body>
+</html>
