@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cover Page Maker</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    .form {
+      margin: 20px auto;
+      max-width: 500px;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .cover {
+      margin-top: 30px;
+      padding: 40px;
+      background: white;
+      border: 2px solid #000;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      display: none;
+      position: relative;
+    }
+    .cover img {
+      max-width: 120px;
+      max-height: 120px;
+      margin-bottom: 20px;
+    }
+    .cover h2 {
+      margin: 10px 0;
+    }
+    .line {
+      margin: 10px 0;
+    }
+    #downloadBtn {
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Cover Page Maker</h1>
+  
+  <div class="form">
+    <input type="text" id="name" placeholder="Your Name">
+    <input type="text" id="institute" placeholder="Institute Name">
+    <input type="text" id="course" placeholder="Course Name">
+    <input type="text" id="code" placeholder="Course Code">
+    <input type="date" id="date">
+    <input type="file" id="logo" accept="image/*">
+    <button onclick="generateCover()">Generate Cover Page</button>
+  </div>
+
+  <div class="cover" id="coverPage">
+    <img id="logoPreview" alt="University Logo">
+    <h2 id="instName">[Institute Name]</h2>
+    <hr>
+    <h3>Course Title: <span id="courseName">[Course Name]</span></h3>
+    <div class="line">Course Code: <span id="courseCode">[Code]</span></div>
+    <div class="line">Submitted By: <span id="yourName">[Your Name]</span></div>
+    <div class="line">Date: <span id="submitDate">[Date]</span></div>
+  </div>
+
+  <button id="downloadBtn" onclick="downloadPDF()">Download as PDF</button>
+
+  <script>
+    function generateCover() {
+      const name = document.getElementById("name").value;
+      const institute = document.getElementById("institute").value;
+      const course = document.getElementById("course").value;
+      const code = document.getElementById("code").value;
+      const date = document.getElementById("date").value;
+      const logoFile = document.getElementById("logo").files[0];
+
+      // Set text content
+      document.getElementById("instName").innerText = institute || "[Institute Name]";
+      document.getElementById("courseName").innerText = course || "[Course Name]";
+      document.getElementById("courseCode").innerText = code || "[Course Code]";
+      document.getElementById("yourName").innerText = name || "[Your Name]";
+      document.getElementById("submitDate").innerText = date || "[Date]";
+
+      // Set logo
+      const logoPreview = document.getElementById("logoPreview");
+      if (logoFile) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          logoPreview.src = e.target.result;
+        };
+        reader.readAsDataURL(logoFile);
+      } else {
+        logoPreview.src = "";
+      }
+
+      document.getElementById("coverPage").style.display = "block";
+      document.getElementById("downloadBtn").style.display = "inline-block";
+    }
+
+    function downloadPDF() {
+      const cover = document.getElementById("coverPage");
+      const opt = {
+        margin: 0.5,
+        filename: 'cover-page.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().from(cover).set(opt).save();
+    }
+  </script>
+
+</body>
+</html>
